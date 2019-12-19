@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Vremenska pr</title>
+  <link rel="stylesheet" href="style.css" type="text/css"/>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+<body>
+ <div id="prvi">
+    <h1> Vremenska prognoza . . .</h1>
+    <input ID="grad" type="search">
+    <input id="dugme" type="submit" value="Traži"> 
+ </div>
+<div id="drugi" class="cont">
+    <div class="lev">
+        <p id="datum"></p>
+        <h2 id="mjesto">nicaze</h3>
+        <h1 id="temp">26 C</h1>
+        <p id="vrij">tmurno</p>
+        <img id="slika" >
+    </div>
+    <div class="lev">
+        <p id="n1">Pritisak: </p>
+        <p id="n2">Vlažnost: </p>
+        <p id="n3">Min temperatura: </p>
+        <p id="n4">Max temperatura: </p>
+        <p id="n5">Vjetar brz.: </p>
+        <p id="n6">Vjetar ugao: </p>
+    </div>
+</div>
+<div id="treci" class="cont">
+    <h2 id="prog">Prognoza za naredni period</h2>
+</div>
+
+<script>
+  
+  $(document).ready(function () {
+    $("#dugme").on("click",function(e) {
+       $("#drugi").hide(500);
+       $("#treci").hide(500);
+       var city = [];
+       e.preventDefault();
+	var grad = $('#grad').val();
+	if (grad !== '') {
+  	$.ajax({
+    	type: 'GET',
+    	url: 'https://api.openweathermap.org/data/2.5/weather?q=' + grad + '&appid=72308c9f3f82163cae1b26eabeb3a2bc',
+    	dataType: 'jsonp',
+    	success: function(podaci) {
+          
+          city.push(grad);
+          $('#vrij').empty().text(podaci.weather[0].description);
+          $("#mjesto").empty().text(podaci.name);
+          $('#temp').empty().text(podaci.main.temp + "°C");
+          $('#p1').empty().append("Pressure: " + podaci.main.pressure + " hPa");
+          $('#p2').empty().append("Humidity: " + podaci.main.humidity + " %");
+          $('#p3').empty().append("Min temperature: " + podaci.main.temp_min + "°C");
+          $('#p4').empty().append("Max temperature: " + podaci.main.temp_max + "°C");
+          $('#p5').empty().append("Wind Speed: " + podaci.wind.speed + " m/s");
+          $('#p6').empty().append("Wind Direction: " + podaci.wind.deg + "°");
+          $('#slika').attr('src', 'http://openweathermap.org/img/w/' + podaci.weather[0].icon + '.png');
+      	
+    	}
+  	})
+	}
+    $(function() {
+	var today = new Date();
+	var dd = today.getDate();
+	var mm = today.getMonth();
+	var month = ["Januar", "Februar", "Mart", "April", "May", "Juni", "Juli", "August", "Septembar", "Oktobar", "Novembar", "Decembar"];
+	var yyyy = today.getFullYear();
+ 
+	today = dd + ' ' + month[mm] + ' ' + yyyy;
+    $("#datum").text("Danas je:  " + today);
+       });
+
+       $("#drugi").show(500);
+       $("#treci").show(800);
+    });
+ $("#drugi").hide();
+ $("#treci").hide();
+});
+</script>     
+</body>
+</html>
