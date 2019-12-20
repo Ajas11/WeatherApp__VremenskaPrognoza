@@ -2,6 +2,7 @@
     padding:0;
     margin:0;
     box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
   }
   body{
     background-color:rgb(214, 231, 248);
@@ -12,44 +13,60 @@
       background-size: cover;
       background-repeat: no-repeat;
       height: 200px;
-      width: 700px;
+      width: 800px;
       border-radius: 20px;
       padding: 10px;
       position: relative;
   }
-  #treci {
-      height:400px;
-  }
+ 
   .cont {
     margin: 10px auto;
     background-color: rgb(57, 144, 226);
     height: 300px;
-    width: 700px;
+    width: 800px;
     border-radius: 20px;
     display:flex;
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
   }
+  #naredni {
+      margin: 0 auto;
+      width: 260px;
+      color: whitesmoke;
+      font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+      color: rgb(57, 144, 226);
+  }
+  #treci {
+    height:400px;
+    background-size: cover;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    font-size: small;
+  }
     input {
       border-radius: 7px;
       border: 2px solid lightblue;
       font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+      font-size: medium;
   }
  
   #grad {
     height: 35px;
     width: 200px;
     position: absolute;
-    left: 330px;
+    left: 380px;
     top: 130px;
+    padding-left: 30px;
   }
   #grad:focus {
     border-color: #333;
 }
   #dugme {
     position: absolute;
-     left: 550px;
+    left: 600px;
     top: 130px;
     height: 35px;
     width: 100px;
@@ -66,7 +83,7 @@
      flex-direction: column;
      justify-content: space-between;
   }
- img {
+ #slika {
      width: 100px;
      height: 80px;
      margin-left: 30px;
@@ -84,6 +101,29 @@
 #mjesto, #temp, #datum, #vrij {
     color:#eee;
     font-family: Arial, Helvetica, sans-serif;
+}
+ thead {
+    font-family: "Oswald";
+    background-color: rgba(125, 230, 237, 0.5);
+    border-top-left-radius: 9px;
+    
+  }
+tr {
+    display: flex;
+    vertical-align: ceter;
+    justify-content: center;
+    border-color: inherit;
+}
+td {
+    width: 75px;
+    height: 60px;
+    background-color: rgba(125, 230, 237, 0.2);
+    border: solid whitesmoke 0.1px;
+    text-align: center;
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    overflow: initial;
 }
 
   

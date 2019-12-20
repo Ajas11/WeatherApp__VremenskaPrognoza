@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
-  <title>Vremenska pr</title>
+  <title>Vremenska prognoza</title>
   <link rel="stylesheet" href="style.css" type="text/css"/>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 </head>
@@ -16,9 +16,9 @@
 <div id="drugi" class="cont">
     <div class="lev">
         <p id="datum"></p>
-        <h2 id="mjesto">nicaze</h3>
-        <h1 id="temp">26 C</h1>
-        <p id="vrij">tmurno</p>
+        <h2 id="mjesto"></h3>
+        <h1 id="temp"></h1>
+        <p id="vrij"></p>
         <img id="slika" >
     </div>
     <div class="lev">
@@ -30,57 +30,88 @@
         <p id="n6">Vjetar ugao: </p>
     </div>
 </div>
+<div id="naredni">--  ZeForge comunity --  Ajas Pasalic  --</div>
 <div id="treci" class="cont">
-    <h2 id="prog">Prognoza za naredni period</h2>
 </div>
 
 <script>
   
-  $(document).ready(function () {
+$(document).ready(function () {
     $("#dugme").on("click",function(e) {
-       $("#drugi").hide(500);
-       $("#treci").hide(500);
-       var city = [];
-       e.preventDefault();
-	var grad = $('#grad').val();
-	if (grad !== '') {
-  	$.ajax({
-    	type: 'GET',
-    	url: 'https://api.openweathermap.org/data/2.5/weather?q=' + grad + '&appid=72308c9f3f82163cae1b26eabeb3a2bc',
-    	dataType: 'jsonp',
-    	success: function(podaci) {
+        $("#drugi").hide(500);
+        $("#treci").hide(900);
+        $("#naredni").html("--  ZeForge comunity --  Ajas Pasalic  --");
+        var city = [];
+        e.preventDefault();
+	    var grad = $('#grad').val();
+        $(function() {
+	        var today = new Date();
+	        var dd = today.getDate();
+	        var mm = today.getMonth();
+	        var month = ["Januar", "Februar", "Mart", "April", "May", "Juni", "Juli", "August", "Septembar", "Oktobar", "Novembar", "Decembar"];
+	        var yyyy = today.getFullYear();
+ 	        today = dd + ' ' + month[mm] + ' ' + yyyy;
+            $("#datum").text("Danas je:  " + today);
+        });
+	    if (grad !== '') {
+  	        $.ajax({
+    	        type: 'GET',
+    	        url: 'https://api.openweathermap.org/data/2.5/weather?q=' + grad + '&appid=72308c9f3f82163cae1b26eabeb3a2bc&units=metric',
+    	        dataType: 'jsonp',
+    	        success: function(podaci) {
           
-          city.push(grad);
-          $('#vrij').empty().text(podaci.weather[0].description);
-          $("#mjesto").empty().text(podaci.name);
-          $('#temp').empty().text(podaci.main.temp + "°C");
-          $('#p1').empty().append("Pressure: " + podaci.main.pressure + " hPa");
-          $('#p2').empty().append("Humidity: " + podaci.main.humidity + " %");
-          $('#p3').empty().append("Min temperature: " + podaci.main.temp_min + "°C");
-          $('#p4').empty().append("Max temperature: " + podaci.main.temp_max + "°C");
-          $('#p5').empty().append("Wind Speed: " + podaci.wind.speed + " m/s");
-          $('#p6').empty().append("Wind Direction: " + podaci.wind.deg + "°");
-          $('#slika').attr('src', 'http://openweathermap.org/img/w/' + podaci.weather[0].icon + '.png');
-      	
-    	}
-  	})
-	}
-    $(function() {
-	var today = new Date();
-	var dd = today.getDate();
-	var mm = today.getMonth();
-	var month = ["Januar", "Februar", "Mart", "April", "May", "Juni", "Juli", "August", "Septembar", "Oktobar", "Novembar", "Decembar"];
-	var yyyy = today.getFullYear();
- 
-	today = dd + ' ' + month[mm] + ' ' + yyyy;
-    $("#datum").text("Danas je:  " + today);
-       });
+                    city.push(grad);
+                    $('#vrij').empty().text(podaci.weather[0].description);
+                    $("#mjesto").empty().text(podaci.name);
+                    $('#temp').empty().text(podaci.main.temp + "°C");
 
-       $("#drugi").show(500);
-       $("#treci").show(800);
+                    $('#n1').empty().append("Pritisak:  " + podaci.main.pressure + " hPa");
+                    $('#n2').empty().append("Vlažnost:  " + podaci.main.humidity + " %");
+                    $('#n3').empty().append("Min temperatura:  " + podaci.main.temp_min + "°C");
+                    $('#n4').empty().append("Max temperatura:  " + podaci.main.temp_max + "°C");
+                    $('#n5').empty().append("Vjetar brz.:  " + podaci.wind.speed + " m/s");
+                    $('#n6').empty().append("Vjetar ugao:  " + podaci.wind.deg + "°");
+                    $('#slika').attr('src', 'http://openweathermap.org/img/w/' + podaci.weather[0].icon + '.png');
+                    $("#drugi").show(500);
+                    $("#treci").show(800);
+    	        }
+                
+  	        })
+            
+            $.ajax({
+  	            type: 'GET',
+  	            url: 'https://api.openweathermap.org/data/2.5/forecast?q=' + grad + '&appid=72308c9f3f82163cae1b26eabeb3a2bc&units=metric',
+                dataType: 'jsonp',
+            	success: function(podaci) {
+                    $("#naredni").html("Prognoza za narednih 5 dana: ");
+                    $("#treci").empty();                    
+    	            var table = '';
+    	            for (var i = 6; i < podaci.list.length; i += 8) {
+      	                table += "<tr>";
+      	                table += "<td>" + podaci.list[i].dt_txt.split(' ')[0];
+                    	table += "<td><img src='http://openweathermap.org/img/w/" + podaci.list[i].weather[0].icon + ".png'></td>";
+                    	table += "<td>" + podaci.list[i].main.temp + "</td>";
+      	                table += "<td>" + podaci.list[i].weather[0].description + "</td>";
+      	                table += "<td>" + podaci.list[i].main.temp_min + "°C</td>";
+                    	table += "<td>" + podaci.list[i].main.temp_max + "°C</td>";
+      	                table += "<td>" + podaci.list[i].main.pressure + "hPa</td>";
+                    	table += "<td>" + podaci.list[i].main.humidity + "%</td>";
+                    	table += "<td>" + podaci.list[i].wind.speed + "m/s</td>";
+                    	table += "<td>" + podaci.list[i].wind.deg + "°</td>";
+ 	                    table += "</tr>";
+    	            }
+                    $('#treci').append('<thead><tr><td>Datum</td><td>Vrijeme</td><td>Temperatura</td><td>Opis</td><td>Min temp</td><td>Max Temp</td><td>Pritisak</td><td>Vlažnost</td><td>Vjetar brz.</td><td>Vjetar ugao</td></tr></thead>');
+                    $("#treci").append(table);
+                      	            
+  	            }
+	        })
+
+	    }
+        
+        
     });
- $("#drugi").hide();
- $("#treci").hide();
+    $("#drugi").hide();
+    $("#treci").hide();
 });
 </script>     
 </body>
